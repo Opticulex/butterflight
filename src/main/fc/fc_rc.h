@@ -28,10 +28,14 @@ typedef enum {
     INTERPOLATION_CHANNELS_RPT,
 } interpolationChannels_e;
 
-extern uint16_t currentRxRefreshRate;
+extern volatile uint16_t currentRxRefreshRate;
 
+#ifdef USE_GYRO_IMUF9001
+extern volatile bool isSetpointNew;
+#endif
 void processRcCommand(void);
 float getSetpointRate(int axis);
+uint32_t getSetpointRateInt(int axis);
 float getRcDeflection(int axis);
 float getRcDeflectionAbs(int axis);
 float getThrottlePIDAttenuation(void);
