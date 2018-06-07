@@ -16,6 +16,7 @@
  */
 
 #include <stdbool.h>
+#include <string.h>
 #include <stdint.h>
 #include <math.h>
 
@@ -45,6 +46,10 @@
 #include "scheduler/scheduler.h"
 
 #include "sensors/battery.h"
+
+#ifdef USE_GYRO_IMUF9001
+    volatile bool isSetpointNew;
+#endif
 
 typedef float (applyRatesFn)(const int axis, float rcCommandf, const float rcCommandfAbs);
 
@@ -143,7 +148,7 @@ static void calculateSetpointRate(int axis)
 
     float angleRate = applyRates(axis, rcCommandf, rcCommandfAbs);
     setpointRate[axis] = constrainf(angleRate, -SETPOINT_RATE_LIMIT, SETPOINT_RATE_LIMIT); // Rate limit protection (deg/sec)
-    setpointRateInt[axis] = (uint32_t)setpointRate[axis];
+    memcpy((uint32_t*)&setpointRateInt[axis], (uint32_t*)&setpointRate[axis], sizeof(float));
 }
 
 static void scaleRcCommandToFpvCamAngle(void)
@@ -260,7 +265,9 @@ void processRcCommand(void)
 #endif
             calculateSetpointRate(axis);
         }
-
+        #ifdef USE_GYRO_IMUF9001
+        isSetpointNew = 1;
+        #endif
         if (debugMode == DEBUG_RC_INTERPOLATION) {
             debug[2] = rcInterpolationStepCount;
             debug[3] = setpointRate[0];
