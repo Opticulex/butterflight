@@ -268,6 +268,7 @@ void fcTasksInit(void)
     }
 
     setTaskEnabled(TASK_RX, true);
+    setTaskEnabled(TASK_RC_INTERP, true);
 
     setTaskEnabled(TASK_DISPATCH, dispatchIsEnabled());
 
@@ -439,13 +440,20 @@ cfTask_t cfTasks[TASK_COUNT] = {
         .desiredPeriod = TASK_PERIOD_HZ(DEFAULT_ATTITUDE_UPDATE_INTERVAL),
         .staticPriority = TASK_PRIORITY_HIGH,
     },
-
+    
     [TASK_RX] = {
         .taskName = "RX",
         .checkFunc = rxUpdateCheck,
         .taskFunc = taskUpdateRxMain,
         .desiredPeriod = TASK_PERIOD_HZ(160),        // If event-based scheduling doesn't work, fallback to periodic scheduling
         .staticPriority = TASK_PRIORITY_TRIGGER,
+    },
+
+    [TASK_RC_INTERP] = {
+        .taskName = "RC_INTERP",
+        .taskFunc = taskRcCommand,
+        .desiredPeriod = TASK_PERIOD_HZ(RC_INTERP_LOOPTIME),        // If event-based scheduling doesn't work, fallback to periodic scheduling
+        .staticPriority = TASK_PRIORITY_HIGH,
     },
 
     [TASK_DISPATCH] = {

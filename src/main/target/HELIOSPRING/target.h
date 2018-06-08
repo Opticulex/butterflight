@@ -24,7 +24,8 @@
 
 #define LED0_PIN                PB7
 
-#define BEEPER                  PC15
+#define USE_BEEPER
+#define BEEPER_PIN                  PC15
 #define BEEPER_INVERTED
 
 #define USE_GYRO
@@ -53,11 +54,12 @@
 #define USE_FLASHFS
 #define USE_FLASH_M25P16
 #define FLASH_SPI_INSTANCE      SPI3
-#define FLASH_CS_PIN            PC14
+#define FLASH_CS_PIN            SPI3_NSS_PIN
+#define ENABLE_BLACKBOX_LOGGING_ON_SPIFLASH_BY_DEFAULT
 
 #define USE_VCP
-
-#define VBUS_SENSING_PIN        PC5
+#define USE_USB_DETECT
+#define USB_DETECT_PIN          PC5
 
 #define USE_OSD
 #define USE_MAX7456
@@ -205,6 +207,7 @@
 #define USE_BUTTERED_PIDS true
 #undef USE_YAW_SPIN_RECOVERY
 #undef USE_GYRO_OVERFLOW_CHECK
+#undef USE_GYRO_FAST_KALMAN
 
 #define DEFAULT_PIDS_ROLL   {50, 40, 20}
 #define DEFAULT_PIDS_PITCH  {50, 40, 22}

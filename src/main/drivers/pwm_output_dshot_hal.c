@@ -140,6 +140,7 @@ static void motor_DMA_IRQHandler(dmaChannelDescriptor_t* descriptor)
 
 void pwmDshotMotorHardwareConfig(const timerHardware_t *timerHardware, uint8_t motorIndex, motorPwmProtocolTypes_e pwmProtocolType, uint8_t output)
 {
+    memset(&dmaMotors, 0, sizeof(dmaMotors));
     DMA_Stream_TypeDef *dmaRef;
 
 #ifdef USE_DSHOT_DMAR

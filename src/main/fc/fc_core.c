@@ -847,8 +847,7 @@ bool processRx(timeUs_t currentTimeUs)
 
 static FAST_CODE void subTaskPidController(timeUs_t currentTimeUs)
 {
-    uint32_t startTime = 0;
-    if (debugMode == DEBUG_PIDLOOP) {startTime = micros();}
+    uint32_t startTime = startTime = micros();
     // PID - note this is function pointer set by setPIDController()
     pidController(currentPidProfile, &accelerometerConfig()->accelerometerTrims, currentTimeUs);
     DEBUG_SET(DEBUG_PIDLOOP, 1, micros() - startTime);
@@ -898,7 +897,7 @@ static FAST_CODE void subTaskPidController(timeUs_t currentTimeUs)
 #endif
 }
 
-static FAST_CODE_NOINLINE void subTaskMainSubprocesses(timeUs_t currentTimeUs)
+static FAST_CODE void subTaskMainSubprocesses(timeUs_t currentTimeUs)
 {
     uint32_t startTime = 0;
     if (debugMode == DEBUG_PIDLOOP) {
@@ -971,7 +970,7 @@ static FAST_CODE void subTaskMotorUpdate(timeUs_t currentTimeUs)
     DEBUG_SET(DEBUG_PIDLOOP, 2, micros() - startTime);
 }
 
-static FAST_CODE_NOINLINE void subTaskRcCommand(timeUs_t currentTimeUs)
+FAST_CODE void taskRcCommand(timeUs_t currentTimeUs)
 {
 
     // If we're armed, at minimum throttle, and we do arming via the
@@ -990,7 +989,7 @@ static FAST_CODE_NOINLINE void subTaskRcCommand(timeUs_t currentTimeUs)
         resetYawAxis();
     }
 
-    if (throttleCorrectionConfig()->throttle_correction_value && (FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE))) {
+    if ((FLIGHT_MODE(ANGLE_MODE) || FLIGHT_MODE(HORIZON_MODE)) && throttleCorrectionConfig()->throttle_correction_value) {
         rcCommand[THROTTLE] += calculateThrottleAngleCorrection(throttleCorrectionConfig()->throttle_correction_value);
     }
 
@@ -1001,7 +1000,7 @@ static FAST_CODE_NOINLINE void subTaskRcCommand(timeUs_t currentTimeUs)
 // Function for loop trigger
 FAST_CODE void taskMainPidLoop(timeUs_t currentTimeUs)
 {
-    static uint32_t pidUpdateCounter = 0;
+    static uint32_t pidUpdateCountdown = 0;
 
 #ifdef USE_DMA_SPI_DEVICE
     dmaSpiDeviceDataReady = false;
@@ -1022,17 +1021,17 @@ FAST_CODE void taskMainPidLoop(timeUs_t currentTimeUs)
     gyroUpdate(currentTimeUs);
     DEBUG_SET(DEBUG_PIDLOOP, 0, micros() - currentTimeUs);
 
-    if (pidUpdateCounter++ % pidConfig()->pid_process_denom == 0) {
-        subTaskRcCommand(currentTimeUs);
+    if (pidUpdateCountdown) {
+        pidUpdateCountdown--;
+    } else {
+        pidUpdateCountdown = pidConfig()->pid_process_denom - 1;
         subTaskPidController(currentTimeUs);
         subTaskMotorUpdate(currentTimeUs);
         subTaskMainSubprocesses(currentTimeUs);
     }
 
-    if (debugMode == DEBUG_CYCLETIME) {
-        debug[0] = getTaskDeltaTime(TASK_SELF);
-        debug[1] = averageSystemLoadPercent;
-    }
+    DEBUG_SET(DEBUG_CYCLETIME, 0, getTaskDeltaTime(TASK_SELF));
+    DEBUG_SET(DEBUG_CYCLETIME, 1, averageSystemLoadPercent);
     //__enable_irq();
 }
 

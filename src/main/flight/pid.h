@@ -117,7 +117,7 @@ typedef struct pidProfile_s {
     uint16_t acro_trainer_lookahead_ms;     // The lookahead window in milliseconds used to reduce overshoot
 } pidProfile_t;
 
-typedef float (*pidControllerFn)(int axis, float errorRate, float dynCi, float iDT, float* currentPidSetpoint);
+typedef void (*pidControllerFn)(int axis, float errorRate, float dynCi, float iDT, float* currentPidSetpoint);
 
 #ifndef USE_OSD_SLAVE
 PG_DECLARE_ARRAY(pidProfile_t, MAX_PROFILE_COUNT, pidProfiles);

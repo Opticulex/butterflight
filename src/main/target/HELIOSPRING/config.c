@@ -30,10 +30,12 @@
 #include "fc/config.h"
 #include "fc/fc_rc.h"
 #include "fc/rc_controls.h"
-#include "rx/rx.h"\
+#include "rx/rx.h"
+#include "telemetry/telemetry.h"
 
 
 void targetConfiguration(void) {
+    telemetryConfigMutable()->halfDuplex = true;
     voltageSensorADCConfigMutable(VOLTAGE_SENSOR_ADC_VBAT)->vbatscale = VBAT_SCALE;
     // armingConfigMutable()->gyro_cal_on_first_arm = true;
     motorConfigMutable()->dev.motorPwmProtocol = PWM_TYPE_MULTISHOT;

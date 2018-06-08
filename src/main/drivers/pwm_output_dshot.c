@@ -20,6 +20,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include <math.h>
 
 #include "platform.h"
@@ -140,6 +141,7 @@ static void motor_DMA_IRQHandler(dmaChannelDescriptor_t *descriptor)
 
 void pwmDshotMotorHardwareConfig(const timerHardware_t *timerHardware, uint8_t motorIndex, motorPwmProtocolTypes_e pwmProtocolType, uint8_t output)
 {
+    memset(&dmaMotors, 0, sizeof(dmaMotors));
 #if defined(STM32F4) || defined(STM32F7)
     typedef DMA_Stream_TypeDef dmaStream_t;
 #else

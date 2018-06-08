@@ -496,7 +496,7 @@ void mixerResetDisarmedMotors(void)
     }
 }
 
-void writeMotors(void)
+void FAST_CODE writeMotors(void)
 {
     if (pwmAreMotorsEnabled()) {
         for (int i = 0; i < motorCount; i++) {
@@ -745,7 +745,7 @@ float applyThrottleLimit(float throttle)
     return throttle;
 }
 
-FAST_CODE_NOINLINE void mixTable(timeUs_t currentTimeUs, uint8_t vbatPidCompensation)
+FAST_CODE void mixTable(timeUs_t currentTimeUs, uint8_t vbatPidCompensation)
 {
     if (isFlipOverAfterCrashMode()) {
         applyFlipOverAfterCrashModeToMotors();

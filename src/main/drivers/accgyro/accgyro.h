@@ -44,8 +44,18 @@
 #define GYRO_HARDWARE_LPF_1KHZ_SAMPLE  2
 
 #define GYRO_32KHZ_HARDWARE_LPF_NORMAL       0
-#define GYRO_32KHZ_HARDWARE_LPF_EXPERIMENTAL 1
+#define GYRO_32KHZ_HARDWARE_LPF_EXPERIMENTAL 1    
 
+enum {
+    GYRO_LPF_256HZ = 0,
+    GYRO_LPF_188HZ,
+    GYRO_LPF_98HZ,
+    GYRO_LPF_42HZ,
+    GYRO_LPF_20HZ,
+    GYRO_LPF_10HZ,
+    GYRO_LPF_5HZ,
+    GYRO_LPF_NONE
+};
 //This optimizes the frequencies instead of calculating them 
 //in the case of 1100 and 9000, they would divide as irrational numbers.
 #define GYRO_RATE_1_kHz     1000.0f
@@ -54,7 +64,7 @@
 #define GYRO_RATE_8_kHz     125.0f
 #define GYRO_RATE_9_kHz     111.11f
 #define GYRO_RATE_16_kHz    62.5f
-#define GYRO_RATE_32_kHz    31.25f
+#define GYRO_RATE_32_kHz    34.0f
 
 typedef struct gyroDev_s {
 #if defined(SIMULATOR_BUILD) && defined(SIMULATOR_MULTITHREAD)

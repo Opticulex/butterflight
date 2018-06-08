@@ -29,7 +29,9 @@ typedef enum {
 } interpolationChannels_e;
 
 extern volatile uint16_t currentRxRefreshRate;
-
+#ifndef RC_INTERP_LOOPTIME
+#define RC_INTERP_LOOPTIME 2000
+#endif
 #ifdef USE_GYRO_IMUF9001
 extern volatile bool isSetpointNew;
 #endif

@@ -99,6 +99,12 @@ extern "C" {
             .desiredPeriod = TASK_PERIOD_HZ(50),
             .staticPriority = TASK_PRIORITY_HIGH,
         },
+        [TASK_RC_INTERP] = {
+            .taskName = "RC_INTERP",
+            .taskFunc = taskRcCommand,
+            .desiredPeriod = TASK_PERIOD_HZ(RC_INTERP_LOOPTIME),
+            .staticPriority = TASK_PRIORITY_HIGH,
+        },
         [TASK_SERIAL] = {
             .taskName = "SERIAL",
             .taskFunc = taskHandleSerial,
