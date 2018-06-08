@@ -36,9 +36,6 @@
 void targetConfiguration(void) {
     voltageSensorADCConfigMutable(VOLTAGE_SENSOR_ADC_VBAT)->vbatscale = VBAT_SCALE;
     // armingConfigMutable()->gyro_cal_on_first_arm = true;
-    rxConfigMutable()->rcInterpolation         = RC_SMOOTHING_MANUAL;
-    rxConfigMutable()->rcInterpolationInterval = 14;
-    rxConfigMutable()->rcInterpolationChannels = RC_INTERP_RPYT;
     motorConfigMutable()->dev.motorPwmProtocol = PWM_TYPE_MULTISHOT;
     gyroConfigMutable()->gyro_sync_denom  = 2; // 16KHZ GYRO
     pidConfigMutable()->pid_process_denom = 1; // 16KHZ PID
@@ -46,28 +43,7 @@ void targetConfiguration(void) {
     
     for (uint8_t pidProfileIndex = 0; pidProfileIndex < MAX_PROFILE_COUNT; pidProfileIndex++) {
         pidProfile_t *pidProfile = pidProfilesMutable(pidProfileIndex);
-
-        pidProfile->buttered_pids = pidProfileIndex > 0;
-        if (pidProfile->buttered_pids) {
-            pidProfile->pid[PID_ROLL]  = BUTTERED_PIDS_ROLL;
-            pidProfile->pid[PID_PITCH] = BUTTERED_PIDS_PITCH;
-            pidProfile->pid[PID_YAW]   = BUTTERED_PIDS_YAW;
-        }
-       
-        /* Setpoints */
-        // should't need to set these since they don't get init in gyro.c with USE_GYRO_IMUF
-        // pidProfile->yaw_lpf_hz = 0;
-        // pidProfile->dterm_lpf_hz = 0;    
-        // pidProfile->dterm_notch_hz = 0;
-        // pidProfile->dterm_notch_cutoff = 0;
-        if (!pidProfileIndex) {
-            pidProfile->dtermSetpointWeight   = 100;	
-            pidProfile->setpointRelaxRatio    = 100;
-        }
-        pidProfile->dterm_filter_type     = FILTER_BIQUAD;
-        pidProfile->dterm_filter_style    = KD_FILTER_NOSP;
-        pidProfile->dterm_lpf_hz          = 65;
-        pidProfile->dterm_notch_cutoff    = 0;
+        pidProfile->dterm_notch_cutoff = 0;
     }
 }
 

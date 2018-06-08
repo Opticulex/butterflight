@@ -194,18 +194,14 @@
 
 #define CAMERA_CONTROL_PIN             PB6    // define dedicated camera_osd_control pin
 
-#define IMUF_DEFAULT_PITCH_Q  2500
-#define IMUF_DEFAULT_ROLL_Q   2500
-#define IMUF_DEFAULT_YAW_Q    2500
+#define IMUF_DEFAULT_PITCH_Q  2000
+#define IMUF_DEFAULT_ROLL_Q   2000
+#define IMUF_DEFAULT_YAW_Q    2000
 #define IMUF_DEFAULT_W        32
 #define IMUF_DEFAULT_LPF_HZ   120.0f
 
 #define USE_BUTTERED_PIDS true
 
-#define DEFAULT_PIDS_ROLL   {45, 50, 20}
-#define DEFAULT_PIDS_PITCH  {45, 50, 22}
-#define DEFAULT_PIDS_YAW    {45, 50, 8}
-
-#define BUTTERED_PIDS_ROLL  (pid8_t){50, 40, 20}
-#define BUTTERED_PIDS_PITCH (pid8_t){54, 40, 22}
-#define BUTTERED_PIDS_YAW   (pid8_t){50, 40, 8}
+#define DEFAULT_PIDS_ROLL   {50, 40, 20}
+#define DEFAULT_PIDS_PITCH  {50, 40, 22}
+#define DEFAULT_PIDS_YAW    {50, 40, 15}
